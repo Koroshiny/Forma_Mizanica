@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum GameMode
 {
@@ -12,6 +12,7 @@ public class GameModeManager : MonoBehaviour
     public static GameModeManager Instance { get; private set; }
 
     public GameMode CurrentMode { get; private set; } = GameMode.Default;
+    public System.Action<GameMode> OnModeChanged;
 
     private void Awake()
     {
@@ -26,14 +27,15 @@ public class GameModeManager : MonoBehaviour
     public void SetMode(GameMode mode)
     {
         CurrentMode = mode;
-        Debug.Log("����� ������� ��: " + mode);
+        Debug.Log("Режим изменён на: " + mode);
 
         MainCell.ResetAllVisuals();
 
         if (mode == GameMode.Building)
-        {
             BuildingSystem.Instance.RestoreSelectedCellVisual();
-        }
+
+        // 🔥 ВАЖНО: уведомляем всех, кто подписан
+        OnModeChanged?.Invoke(mode);
     }
 
     public void BackToDefault() => SetMode(GameMode.Default);

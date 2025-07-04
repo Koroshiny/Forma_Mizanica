@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MainCell : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class MainCell : MonoBehaviour
     public bool isHovered = false;
 
     public BuildingData currentBuilding;
+
 
     void Awake()
     {
@@ -55,18 +56,26 @@ public class MainCell : MonoBehaviour
 
     void OnMouseDown()
     {
+        // Если мы в дефолтном режиме — просто переходим в редактирование (без движения камеры)
         if (GameModeManager.Instance.CurrentMode == GameMode.Default)
         {
             GameModeManager.Instance.EnterEditMode();
-            CameraController.Instance.ApplyPresetByIndex(0); // ��� ������
+            return;
         }
+
+        // Если в режиме редактирования — выбираем конкретную ячейку
         else if (GameModeManager.Instance.CurrentMode == GameMode.Editing && !isSelected && !isBuilt)
         {
             BuildingSystem.Instance.SetSelectedCell(this);
             Select();
             GameModeManager.Instance.EnterBuildMode();
+
+            // 🔥 Вот здесь — включаем плавное перемещение камеры (например, на вид сверху)
+            CameraController.Instance.ApplyPresetByIndex(0);
         }
     }
+
+
 
     public void Select()
     {

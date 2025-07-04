@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // если используешь TextMeshPro
 
 public class UIController : MonoBehaviour
 {
@@ -12,10 +11,33 @@ public class UIController : MonoBehaviour
     public Transform buildingButtonParent;
     public Transform cameraButtonParent;
 
+    [Header("Panels")]
+    public GameObject buildingPanel;
+    public GameObject cameraPanel;
+
     private void Start()
     {
         SetupBuildingButtons();
         SetupCameraButtons();
+
+        GameModeManager.Instance.OnModeChanged += HandleModeChanged;
+        HandleModeChanged(GameModeManager.Instance.CurrentMode);
+    }
+
+
+    private void OnDestroy()
+    {
+        if (GameModeManager.Instance != null)
+            GameModeManager.Instance.OnModeChanged -= HandleModeChanged;
+    }
+
+    private void HandleModeChanged(GameMode mode)
+    {
+        // BuildingPanel — только в режиме строительства
+        buildingPanel.SetActive(mode == GameMode.Building);
+
+        // CameraPanel — в редактировании или строительстве
+        cameraPanel.SetActive(mode == GameMode.Editing || mode == GameMode.Building);
     }
 
     private void SetupBuildingButtons()
