@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd710e542b30c594a8da61f5e37f5890, type: 3}
   m_Name: House
   m_EditorClassIdentifier: 
+  energyCost: 10
   type: 1
   prefab: {fileID: 6216837702869485650, guid: f31cda647ed0fdc4f8e08e5374b40c35, type: 3}
-  yinAmount: 20
-  yangAmount: 2
+  yinAmount: 1
+  yangAmount: 5
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}

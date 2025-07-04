@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnergyBalanceSystem : MonoBehaviour
 {
@@ -9,25 +7,41 @@ public class EnergyBalanceSystem : MonoBehaviour
     public float yin = 0f;
     public float yang = 0f;
 
-    void Awake() => Instance = this;
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
-        InvokeRepeating("UpdateBalance", 1f, 1f); // �������� UpdateBalance ��� � �������
+        InvokeRepeating("UpdateBalance", 1f, 1f); // раз в секунду
     }
 
     public void AddYin(float amount) => yin += amount;
     public void AddYang(float amount) => yang += amount;
 
-    public void UpdateBalance()
+    void UpdateBalance()
     {
         float total = yin + yang;
-        if (total == 0) return;
+        if (total == 0) total = 1f;
+
+        // Добавляем мягко в зависимости от времени суток
+        if (DayNightCycle.Instance.IsNight)
+            yin += 0.05f;
+        else
+            yang += 0.05f;
 
         float imbalance = Mathf.Abs(yin - yang) / total;
         if (imbalance > 0.2f)
-            ChaosSystem.Instance.AddChaos(imbalance * 5f * Time.deltaTime);
+        {
+            ChaosSystem.Instance.AddChaos(imbalance * 5f);
+        }
     }
 
-    public bool IsBalanced() => Mathf.Abs(yin - yang) / (yin + yang) <= 0.2f;
+    public bool IsBalanced()
+    {
+        float total = yin + yang;
+        if (total == 0f) return true;
+        return Mathf.Abs(yin - yang) / total <= 0.2f;
+    }
 }

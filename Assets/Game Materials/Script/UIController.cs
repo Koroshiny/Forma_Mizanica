@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -15,6 +16,20 @@ public class UIController : MonoBehaviour
     public GameObject buildingPanel;
     public GameObject cameraPanel;
 
+    [Header("YinYang UI")]
+    public Image yinFill;
+    public Image yangFill;
+    public TextMeshProUGUI yinText;
+    public TextMeshProUGUI yangText;
+
+    [Header("Chaos UI")]
+    public Slider chaosSlider;
+    public TextMeshProUGUI chaosText;
+
+    [Header("Energy UI")]
+    public Slider energySlider;
+    public TextMeshProUGUI energyText;
+
     private void Start()
     {
         SetupBuildingButtons();
@@ -22,21 +37,36 @@ public class UIController : MonoBehaviour
 
         GameModeManager.Instance.OnModeChanged += HandleModeChanged;
         HandleModeChanged(GameModeManager.Instance.CurrentMode);
+
+        if (ChaosSystem.Instance != null)
+        {
+            ChaosSystem.Instance.OnChaosChanged.AddListener(UpdateChaosUI);
+        }
+
+        // »нициализировать UI при старте
+        UpdateYinYangUI();
+        UpdateChaosUI(ChaosSystem.Instance?.Chaos ?? 0f);
+        UpdateEnergyUI();
     }
 
+    private void Update()
+    {
+        UpdateYinYangUI();
+        UpdateEnergyUI();
+    }
 
     private void OnDestroy()
     {
         if (GameModeManager.Instance != null)
             GameModeManager.Instance.OnModeChanged -= HandleModeChanged;
+
+        if (ChaosSystem.Instance != null)
+            ChaosSystem.Instance.OnChaosChanged.RemoveListener(UpdateChaosUI);
     }
 
     private void HandleModeChanged(GameMode mode)
     {
-        // BuildingPanel Ч только в режиме строительства
         buildingPanel.SetActive(mode == GameMode.Building);
-
-        // CameraPanel Ч в редактировании или строительстве
         cameraPanel.SetActive(mode == GameMode.Editing || mode == GameMode.Building);
     }
 
@@ -86,5 +116,41 @@ public class UIController : MonoBehaviour
                     CameraController.Instance.ApplyPresetByIndex(index);
                 });
         }
+    }
+
+    private void UpdateYinYangUI()
+    {
+        if (EnergyBalanceSystem.Instance == null) return;
+
+        float yin = EnergyBalanceSystem.Instance.yin;
+        float yang = EnergyBalanceSystem.Instance.yang;
+        float total = Mathf.Max(1f, yin + yang);
+
+        float yinPercent = yin / total;
+        float yangPercent = yang / total;
+
+        if (yinFill) yinFill.fillAmount = yinPercent;
+        if (yangFill) yangFill.fillAmount = yangPercent;
+
+        if (yinText) yinText.text = $"»нь: {(yinPercent * 100f):F0}%";
+        if (yangText) yangText.text = $"ян: {(yangPercent * 100f):F0}%";
+    }
+
+    private void UpdateChaosUI(float chaos)
+    {
+        float max = ChaosSystem.Instance != null ? ChaosSystem.Instance.MaxChaos : 100f;
+
+        if (chaosSlider) chaosSlider.value = chaos / max;
+        if (chaosText) chaosText.text = $"’аос: {chaos:F1}%";
+    }
+
+    private void UpdateEnergyUI()
+    {
+        if (EnergyManager.Instance == null) return;
+
+        float energy = EnergyManager.Instance.currentEnergy;
+
+        if (energySlider) energySlider.value = energy / EnergyManager.maxEnergy;
+        if (energyText) energyText.text = $"Ёнерги€: {energy:F0}";
     }
 }

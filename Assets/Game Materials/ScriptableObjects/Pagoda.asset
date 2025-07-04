@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd710e542b30c594a8da61f5e37f5890, type: 3}
   m_Name: Pagoda
   m_EditorClassIdentifier: 
+  energyCost: 8
   type: 3
   prefab: {fileID: 7862229709266890415, guid: 0e068b09592c3a046a4f0b6c5e41c225, type: 3}
   yinAmount: 3
-  yangAmount: 3
+  yangAmount: 2
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd710e542b30c594a8da61f5e37f5890, type: 3}
   m_Name: Garden
   m_EditorClassIdentifier: 
+  energyCost: 9
   type: 4
   prefab: {fileID: 2341095927587820574, guid: e21a0a982d375ce41b8adce0066915a3, type: 3}
-  yinAmount: 1
-  yangAmount: 2
+  yinAmount: 2
+  yangAmount: 4
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}

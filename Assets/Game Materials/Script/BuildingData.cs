@@ -1,8 +1,11 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewBuildingData", menuName = "CityBuilder/Building Data")]
+
 public class BuildingData : ScriptableObject
 {
+    public float energyCost = 10f;
+
     public BuildingType type;
     public GameObject prefab;
     public float yinAmount;

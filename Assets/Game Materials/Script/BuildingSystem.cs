@@ -1,4 +1,4 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
 public class BuildingSystem : MonoBehaviour
 {
@@ -10,6 +10,8 @@ public class BuildingSystem : MonoBehaviour
 
     private int selectedIndex = 0;
     private MainCell selectedCell;
+
+    [SerializeField] private float destroyRefund = 5f;
 
     private void Awake()
     {
@@ -23,7 +25,7 @@ public class BuildingSystem : MonoBehaviour
 
     private void Update()
     {
-        // Кнопка Q работает в любом режиме
+        // РљРЅРѕРїРєР° Q СЂР°Р±РѕС‚Р°РµС‚ РІ Р»СЋР±РѕРј СЂРµР¶РёРјРµ
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (selectedCell != null)
@@ -110,7 +112,15 @@ public class BuildingSystem : MonoBehaviour
         EnergyBalanceSystem.Instance.AddYin(data.yinAmount);
         EnergyBalanceSystem.Instance.AddYang(data.yangAmount);
 
-        Debug.Log($"Построено: {data.type} (+инь: {data.yinAmount}, +ян: {data.yangAmount})");
+        Debug.Log($"РџРѕСЃС‚СЂРѕРµРЅРѕ: {data.type} (+РёРЅСЊ: {data.yinAmount}, +СЏРЅ: {data.yangAmount})");
+
+        // рџ’Ґ РџР РћР’Р•Р РљРђ СЌРЅРµСЂРіРёРё
+        if (!EnergyManager.Instance.SpendEnergy(data.energyCost))
+        {
+            Debug.Log("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЌРЅРµСЂРіРёРё");
+            return;
+        }
+
     }
 
     private void TryDestroy()
@@ -136,13 +146,16 @@ public class BuildingSystem : MonoBehaviour
         selectedCell.isBuilt = false;
         selectedCell.currentBuilding = null;
 
-        Debug.Log("Здание удалено.");
+        Debug.Log("Р—РґР°РЅРёРµ СѓРґР°Р»РµРЅРѕ.");
+
+        EnergyManager.Instance.AddEnergy(5f); // Р¤РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№ РІРѕР·РІСЂР°С‚
+
     }
 
     public void SetBuildingIndex(int index)
     {
         if (index < 0 || index >= buildingOptions.Length) return;
         selectedIndex = index;
-        Debug.Log("Выбрано здание: " + buildingOptions[index].type);
+        Debug.Log("Р’С‹Р±СЂР°РЅРѕ Р·РґР°РЅРёРµ: " + buildingOptions[index].type);
     }
 }

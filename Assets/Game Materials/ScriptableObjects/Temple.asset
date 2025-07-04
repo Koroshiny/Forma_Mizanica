@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd710e542b30c594a8da61f5e37f5890, type: 3}
   m_Name: Temple
   m_EditorClassIdentifier: 
+  energyCost: 10
   type: 2
   prefab: {fileID: 2428209311840739344, guid: a37fbf9bc2fefe044a9f373a85bb3f3b, type: 3}
-  yinAmount: 2
-  yangAmount: 3
+  yinAmount: 5
+  yangAmount: 1
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}

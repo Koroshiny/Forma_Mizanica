@@ -4,15 +4,20 @@ public class EnergyManager : MonoBehaviour
 {
     public static EnergyManager Instance { get; private set; }
 
-    public float currentEnergy = 50;
-    public const float maxEnergy = 100;
+    public float currentEnergy = 50f;
+    public const float maxEnergy = 100f;
 
-    void Awake() => Instance = this;
+    private void Awake()
+    {
+        Instance = this;
+    }
 
-    void Update()
+    private void Update()
     {
         if (DayNightCycle.Instance.IsNight)
-            AddEnergy(10f * Time.deltaTime);
+        {
+            AddEnergy(10f * Time.deltaTime); // восстановление ночью
+        }
     }
 
     public bool SpendEnergy(float amount)
@@ -29,5 +34,8 @@ public class EnergyManager : MonoBehaviour
         return false;
     }
 
-    public void AddEnergy(float amount) => currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
+    public void AddEnergy(float amount)
+    {
+        currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy);
+    }
 }

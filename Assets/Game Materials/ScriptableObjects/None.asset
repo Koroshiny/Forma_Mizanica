@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd710e542b30c594a8da61f5e37f5890, type: 3}
   m_Name: None
   m_EditorClassIdentifier: 
+  energyCost: 5
   type: 0
   prefab: {fileID: 3835584171783783021, guid: fff73883b58569141b731fa2544f0507, type: 3}
   yinAmount: 4
